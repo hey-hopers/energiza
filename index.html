@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EnergizaWeb Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'primary': {
+                '50': '#effef7',
+                '100': '#d9fbe9',
+                '200': '#b7f5d7',
+                '300': '#82edbe',
+                '400': '#4ddf9f',
+                '500': '#24c881',
+                '600': '#19a767',
+                '700': '#158352',
+                '800': '#146743',
+                '900': '#115438',
+                '950': '#072f1e',
+              },
+              'secondary': '#0f172a',
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "zod": "https://aistudiocdn.com/zod@^4.1.12",
+    "dotenv": "https://aistudiocdn.com/dotenv@^17.2.3",
+    "path": "https://aistudiocdn.com/path@^0.12.7",
+    "mssql": "https://aistudiocdn.com/mssql@^12.0.0",
+    "express": "https://aistudiocdn.com/express@^5.1.0",
+    "uuid": "https://aistudiocdn.com/uuid@^13.0.0",
+    "cors": "https://aistudiocdn.com/cors@^2.8.5"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-gray-100">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

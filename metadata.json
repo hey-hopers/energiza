@@ -1,0 +1,5 @@
+{
+  "name": "EnergizaWeb Dashboard",
+  "description": "A web application to manage data and functionalities for users, consumption units, and power plants, supporting energy-related business operations.",
+  "requestFramePermissions": []
+}
