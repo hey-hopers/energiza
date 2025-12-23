@@ -79,6 +79,7 @@ export interface Invoice {
   amount: number;
   status: InvoiceStatus;
   observation?: string;
+  pdfFilePath?: string; 
 }
 
 export interface Business {

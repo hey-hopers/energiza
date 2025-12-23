@@ -9,15 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react-dom": "^19.2.0",
-    "react": "^19.2.0",
-    "zod": "^4.1.12",
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "path": "^0.12.7",
-    "mssql": "^12.0.0",
     "express": "^5.1.0",
+    "mssql": "^12.0.0",
+    "path": "^0.12.7",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "uuid": "^13.0.0",
-    "cors": "^2.8.5"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

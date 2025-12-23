@@ -544,19 +544,74 @@ const MyBusinessPage: React.FC<MyBusinessPageProps> = ({ people, setPeople }) =>
     setIsInvoiceModalOpen(false);
     setEditingInvoice(null);
   };
+
   const handleDeleteInvoice = (invoiceId: string) => {
     if (window.confirm('Tem certeza que deseja excluir esta fatura?')) {
       setInvoices(prev => prev.filter(i => i.id !== invoiceId));
     }
   };
-  const handleInvoiceFormSubmit = (invoiceData: Omit<Invoice, 'id'> & { id?: string }) => {
-    if (invoiceData.id) {
-      setInvoices(prev => prev.map(i => i.id === invoiceData.id ? { ...i, ...invoiceData } as Invoice : i));
-    } else {
-      const newInvoice: Invoice = { ...(invoiceData as Omit<Invoice, 'id'>), id: `inv-${Date.now()}` };
-      setInvoices(prev => [newInvoice, ...prev]);
+
+  const handleInvoiceFormSubmit = async (invoiceData: Omit<Invoice, 'id'> & { id?: string, pdfFile?: File | null }) => {
+    const { id, pdfFile, ...invoiceFields } = invoiceData;
+
+    const formData = new FormData();
+    formData.append('consumptionUnitId', invoiceFields.consumptionUnitId);
+    formData.append('referenceDate', invoiceFields.referenceDate);
+    formData.append('dueDate', invoiceFields.dueDate);
+    formData.append('amount', invoiceFields.amount.toString());
+    formData.append('status', invoiceFields.status);
+    if (invoiceFields.observation) {
+        formData.append('observation', invoiceFields.observation);
     }
-    handleCloseInvoiceModal();
+    if (pdfFile) {
+        formData.append('pdfFile', pdfFile);
+    }
+
+    try {
+        const token = localStorage.getItem('token');
+        const sessionId = localStorage.getItem('sessionId');
+
+        if (!token || !sessionId) {
+            alert('Sessão expirada. Por favor, faça login novamente.');
+            return;
+        }
+
+        const url = id
+            ? `${API_BASE_URL}/invoices/${id}`
+            : `${API_BASE_URL}/invoices`;
+
+        const method = id ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+            method,
+            headers: {
+                // Não defina Content-Type para FormData; o navegador fará isso automaticamente.
+                'Authorization': `Bearer ${token}`,
+                'X-Session-Id': sessionId || '',
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'Erro ao salvar fatura.' }));
+            throw new Error(errorData.message || 'Erro ao salvar fatura.');
+        }
+
+        const result = await response.json();
+        if (result.success) {
+            // Se o backend retornar a fatura atualizada, use-a. Caso contrário, adicione o mock ou atualize.
+            if (id) {
+                setInvoices(prev => prev.map(i => i.id === id ? { ...i, ...result.data } as Invoice : i));
+            } else {
+                setInvoices(prev => [result.data as Invoice, ...prev]);
+            }
+            alert('Fatura salva com sucesso!');
+            handleCloseInvoiceModal();
+        }
+    } catch (error) {
+        console.error('Erro ao salvar fatura:', error);
+        alert(error instanceof Error ? error.message : 'Erro ao salvar fatura. Verifique o console para mais detalhes.');
+    }
   };
   
   const toggleUnitInvoices = (unitId: string) => {
@@ -819,7 +874,7 @@ const MyBusinessPage: React.FC<MyBusinessPageProps> = ({ people, setPeople }) =>
 
         return (
             <div className="space-y-4">
-                {unitsWithDistribution.length > 0 ? (
+                {unitsWithDistribution && unitsWithDistribution.length > 0 ?  (
                     unitsWithDistribution.map(unit => {
                         const unitInvoices = invoicesByUnit[unit.id] || [];
                         const isExpanded = expandedUnitId === unit.id;
@@ -849,12 +904,12 @@ const MyBusinessPage: React.FC<MyBusinessPageProps> = ({ people, setPeople }) =>
 
                                 {isExpanded && (
                                     <div id={`invoices-${unit.id}`} className="p-4 border-t border-gray-200 bg-gray-50">
-                                        <div className="flex justify-between items-center mb-4">
-                                            <h4 className="font-semibold text-gray-700">Histórico de Faturas</h4>
+                                        <div className="flex justify-end mb-4">
                                             <Button onClick={(e) => { e.stopPropagation(); handleOpenInvoiceModal(null, unit.id); }}>
-                                                Adicionar Fatura
+                                                Fatura Manual
                                             </Button>
                                         </div>
+                                        <h4 className="font-semibold text-gray-700 mb-4">Histórico de Faturas</h4>
                                         {unitInvoices.length > 0 ? (
                                             <div className="overflow-x-auto rounded-lg border">
                                                 <table className="min-w-full divide-y divide-gray-200">
