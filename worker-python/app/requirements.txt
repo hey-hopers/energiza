@@ -4,3 +4,4 @@ pydantic
 python-dotenv
 pdfplumber
 python-multipart
+PyPDF2

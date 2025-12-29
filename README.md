@@ -1,20 +1,46 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+## Como Executar a Aplicação
 
-# Run and deploy your AI Studio app
+Este guia detalha os passos para configurar e executar o backend, o frontend e a API Python da aplicação.
 
-This contains everything you need to run your app locally.
+### 1. Backend
 
-View your app in AI Studio: https://ai.studio/apps/drive/1NEP1R5BCDGKuWMeY_I72_p0yYKtX-pku
+O backend é construído com Node.js e TypeScript.
 
-## Run Locally
+1.  **Navegue até o diretório do backend:**  
+   cd backend
+2.  **Instale as dependências:**
+   npm install
+3.  **Compile o TypeScript (se necessário):**
+   npm run build
+4.  **Inicie o servidor em modo de desenvolvimento (com recarregamento automático):**
+   npm run dev
 
-**Prerequisites:**  Node.js
+Ou para iniciar o servidor em modo de produção: npm start
 
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 2. Frontend
+O frontend é desenvolvido com React e Vite.
+
+1.  **Navegue até o diretório do frontend:**
+   cd frontend
+2.  **Instale as dependências:**
+   npm install
+3.  **Inicie o servidor de desenvolvimento:**
+   npm run dev
+
+Isso geralmente iniciará a aplicação em `http://localhost:5173` (ou uma porta similar).
+
+### 3. API Python (Worker)
+A API Python é construída com FastAPI e Uvicorn.
+
+1.  **Navegue até o diretório da API Python:** 
+   cd worker-python/app
+2.  **Instale as dependências:**
+   pip install -r requirements.txt
+3.  **Inicie o servidor Uvicorn:**    
+   python -m uvicorn app.main:app --reload
+
+Isso geralmente iniciará a API em `http://127.0.0.1:8000`.
+
+
+**Observação:** Certifique-se de que todas as variáveis de ambiente necessárias (`.env` files) estejam configuradas em cada um dos respectivos diretórios, conforme a configuração do seu projeto.
